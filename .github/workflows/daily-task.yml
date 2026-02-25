@@ -1,0 +1,28 @@
+name: Daily Repo Update
+
+on:
+  schedule:
+    - cron: '30 5 * * *'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  daily-commit-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout content
+        uses: actions/checkout@v4
+
+      - name: Update log for 24f2000323@ds.study.iitm.ac.in
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add daily_log.txt
+
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Automated daily update"
+            git push
+          fi
